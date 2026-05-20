@@ -123,12 +123,11 @@ img { max-width: 100%; display: block; }
 .header-logo-ue {
   height: 30px;
 }
-.header-logo-sgad {
+.header-logo-transfdig {
   height: 44px;
 }
-.header-logo-mterd {
-  height: 52px;
-  filter: grayscale(1);
+.header-logo-miteco {
+  height: 40px;
 }
 
 .back-btn {
@@ -474,9 +473,10 @@ img { max-width: 100%; display: block; }
 
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
-  .header-logo-inst { height: 28px; }
-  .header-logo-ue   { height: 22px; }
-  .header-logo-sgad { height: 32px; }
+  .header-logo-inst     { height: 28px; }
+  .header-logo-ue       { height: 22px; }
+  .header-logo-transfdig { height: 32px; }
+  .header-logo-miteco   { height: 28px; }
   .header-logos { gap: 8px; }
 }
 @media (max-width: 640px) {
