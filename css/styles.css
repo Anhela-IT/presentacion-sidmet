@@ -267,18 +267,17 @@ img { max-width: 100%; display: block; }
   max-width: 860px;
   width: 100%;
 }
+.page-back-link {
+  margin-bottom: 32px;
+}
 .page-tag {
-  display: inline-block;
+  display: block;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--blue-500);
-  background: var(--blue-100);
-  border: 1px solid var(--blue-200);
-  padding: 4px 12px;
-  border-radius: var(--r-sm);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 .page-title {
   font-size: clamp(1.7rem, 3.5vw, 2.4rem);
