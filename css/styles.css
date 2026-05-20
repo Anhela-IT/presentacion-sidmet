@@ -137,6 +137,7 @@ img { max-width: 100%; display: block; }
   gap: 6px;
   font-size: 0.82rem;
   color: var(--blue-500);
+  background: var(--white);
   padding: 6px 14px;
   border: 1px solid var(--blue-200);
   border-radius: var(--r-sm);
