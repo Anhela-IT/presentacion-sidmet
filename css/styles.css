@@ -107,11 +107,34 @@ img { max-width: 100%; display: block; }
   color: var(--text-sec);
   font-weight: 400;
 }
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.header-logo-inst {
+  height: 40px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+.header-logo-ue {
+  height: 30px;
+}
+.header-logo-sgad {
+  height: 44px;
+}
+.header-logo-mterd {
+  height: 52px;
+  filter: grayscale(1);
+}
+
 .back-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-left: auto;
   font-size: 0.82rem;
   color: var(--blue-500);
   padding: 6px 14px;
@@ -181,10 +204,11 @@ img { max-width: 100%; display: block; }
   border-left: 4px solid var(--orange-300);
   border-radius: var(--r-md);
   cursor: pointer;
-  transition: box-shadow var(--t-sm), border-color var(--t-sm), transform var(--t-md);
+  transition: box-shadow var(--t-sm), border-color var(--t-sm), transform var(--t-md), background var(--t-sm);
   overflow: hidden;
 }
 .nav-card:hover {
+  background: var(--blue-100);
   box-shadow: var(--shadow-xl);
   border-left-color: var(--orange-500);
   transform: translateY(-3px);
@@ -448,6 +472,12 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .header-logo-inst { height: 28px; }
+  .header-logo-ue   { height: 22px; }
+  .header-logo-sgad { height: 32px; }
+  .header-logos { gap: 8px; }
+}
 @media (max-width: 640px) {
   .site-header { padding: 0 16px; }
   .hero-section, .page-wrapper { padding: 32px 16px 48px; }
