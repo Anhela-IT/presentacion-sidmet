@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administración – AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <style>
+    .page-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 22px;
+      border-radius: var(--r-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: var(--font);
+      transition: var(--t-sm);
+    }
+    .page-nav-btn.secondary { border: 1px solid var(--blue-400); color: var(--blue-500); background: var(--white); }
+    .page-nav-btn.secondary:hover { background: var(--blue-700); border-color: var(--blue-700); color: var(--white); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html"><img class="site-logo" src="../img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="../modulos.html" class="back-btn">← Volver a módulos</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container" style="max-width:900px;">
+      <div class="gallery-breadcrumb" style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--grey-400);margin-bottom:18px;">
+        <a href="../index.html" style="color:var(--text-sec);">Inicio</a>
+        <span>›</span>
+        <a href="../modulos.html" style="color:var(--text-sec);">Módulos</a>
+        <span>›</span>
+        <span style="color:var(--blue-900);font-weight:600;">Administración</span>
+      </div>
+
+      <div class="page-tag" style="background:var(--orange-200);border-color:var(--orange-300);color:var(--orange-700);">Solo Administrador</div>
+      <h1 class="page-title">Administración</h1>
+      <div class="page-divider" style="background:var(--orange-500);"></div>
+
+      <p style="font-size:0.98rem;color:var(--text-sec);line-height:1.75;margin-bottom:36px;text-align:justify;padding:0 8px;">
+        Panel exclusivo para el rol <strong>Administrador</strong>. Accesible desde el menú horizontal
+        del portal. Agrupa cinco secciones: gestión de usuarios, zonificación geográfica, diccionarios
+        de reglas, logs del sistema y estadísticas de uso.
+      </p>
+
+      <nav class="section-list" aria-label="Sub-módulos de Administración">
+
+        <a href="administracion-usuarios.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">01</div>
+            <div>
+              <div class="section-link-name">Gestión de usuarios</div>
+              <div class="section-link-meta">Listado, alta desde LDAP, edición de rol y eliminación de cuentas</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="administracion-zonificacion.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">02</div>
+            <div>
+              <div class="section-link-name">Zonificación</div>
+              <div class="section-link-meta">Gestión de las zonas geográficas utilizadas en el filtrado y clasificación de boletines</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="administracion-diccionarios.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">03</div>
+            <div>
+              <div class="section-link-name">Diccionarios</div>
+              <div class="section-link-meta">Reglas de redacción para boletines provinciales y marítimos</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="administracion-logs.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">04</div>
+            <div>
+              <div class="section-link-name">Logs</div>
+              <div class="section-link-meta">Errores del sistema y cambios en documentos</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="administracion-indicadores.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">05</div>
+            <div>
+              <div class="section-link-name">Indicadores de uso</div>
+              <div class="section-link-meta">Estadísticas de actividad del portal por módulo y periodo</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+      </nav>
+
+      <div style="margin-top:40px;">
+        <a href="area-personal.html" class="page-nav-btn secondary">← Área personal</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

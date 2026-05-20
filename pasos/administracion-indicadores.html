@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indicadores de uso – Administración | AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/gallery.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html"><img class="site-logo" src="../img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="administracion.html" class="back-btn">← Volver a Administración</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container" style="max-width:900px;">
+      <div class="gallery-header">
+        <div class="gallery-breadcrumb">
+          <a href="../index.html">Inicio</a>
+          <span>›</span>
+          <a href="../modulos.html">Módulos</a>
+          <span>›</span>
+          <a href="administracion.html">Administración</a>
+          <span>›</span>
+          <span class="current">Indicadores de uso</span>
+        </div>
+        <div class="gallery-title-row">
+          <div>
+            <div class="page-tag" style="background:var(--orange-200);border-color:var(--orange-300);color:var(--orange-700);">Solo Administrador</div>
+            <h1 class="page-title" style="margin-bottom:0;">Indicadores de uso</h1>
+          </div>
+        </div>
+        <div class="page-divider" style="background:var(--orange-500);"></div>
+        <p class="gallery-intro">
+          Panel de <strong>estadísticas de actividad</strong> del portal. Muestra métricas de uso
+          por módulo y periodo: número de accesos, documentos generados (boletines, certificados e informes),
+          usuarios activos y evolución temporal de la actividad.
+        </p>
+      </div>
+
+      <div class="gallery-grid" id="gallery-container"></div>
+
+      <div class="gallery-page-nav">
+        <a href="administracion-logs.html" class="page-nav-btn secondary">← Logs</a>
+        <a href="../modulos.html" class="page-nav-btn primary">Ver todos los módulos →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/gallery.js"></script>
+  <script>
+    initGallery({
+      prefix: 'AdminIndicadores',
+      folder: '../imagenes/AdminIndicadores/',
+      maxImages: 2,
+      container: '#gallery-container'
+    });
+  </script>
+</body>
+</html>

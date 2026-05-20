@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Módulos – AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .page-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 22px;
+      border-radius: var(--r-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: var(--font);
+      transition: var(--t-sm);
+    }
+    .page-nav-btn.secondary { border: 1px solid var(--blue-400); color: var(--blue-500); background: var(--white); }
+    .page-nav-btn.secondary:hover { background: var(--blue-700); border-color: var(--blue-700); color: var(--white); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html"><img class="site-logo" src="img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="index.html" class="back-btn">← Volver al inicio</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container" style="max-width:900px;">
+      <div class="page-tag">Sección 02</div>
+      <h1 class="page-title">Módulos del portal</h1>
+      <div class="page-divider"></div>
+
+      <p style="font-size:0.98rem;color:var(--text-sec);line-height:1.75;margin-bottom:36px;max-width:680px;">
+        El portal se organiza en módulos funcionales desplegados como bundles OSGi independientes.
+        Selecciona uno para ver su guía paso a paso con capturas de pantalla.
+      </p>
+
+      <nav class="section-list" aria-label="Módulos disponibles">
+
+        <a href="pasos/boletines.html" class="section-link-card">
+          <div class="section-link-left">
+            <div class="section-link-num">01</div>
+            <div>
+              <div class="section-link-name">Boletines meteorológicos</div>
+              <div class="section-link-meta">Listado, detalle y edición · Boletines provinciales, marítimos y NAVTEX · todos los usuarios</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="pasos/certificados.html" class="section-link-card">
+          <div class="section-link-left">
+            <div class="section-link-num">02</div>
+            <div>
+              <div class="section-link-name">Certificados meteorológicos</div>
+              <div class="section-link-meta">Solicitud, consulta y edición de certificados oficiales · todos los usuarios</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="pasos/informes.html" class="section-link-card">
+          <div class="section-link-left">
+            <div class="section-link-num">03</div>
+            <div>
+              <div class="section-link-name">Informes meteorológicos</div>
+              <div class="section-link-meta">Creación, consulta, edición y descarga PDF · todos los usuarios</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="pasos/area-personal.html" class="section-link-card">
+          <div class="section-link-left">
+            <div class="section-link-num">04</div>
+            <div>
+              <div class="section-link-name">Área personal</div>
+              <div class="section-link-meta">Perfil de usuario, rol asignado y configuración de cuenta · todos los usuarios</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+        <a href="pasos/administracion.html" class="section-link-card" style="border-left-color:var(--orange-500);">
+          <div class="section-link-left">
+            <div class="section-link-num" style="background:var(--orange-700);">05</div>
+            <div>
+              <div class="section-link-name">Administración</div>
+              <div class="section-link-meta">Gestión de usuarios · Logs y cambios de configuración · Indicadores de uso · Reglas · Notificaciones · solo Administrador</div>
+            </div>
+          </div>
+          <span class="section-link-arrow">→</span>
+        </a>
+
+      </nav>
+
+      <div style="margin-top:40px;">
+        <a href="arquitectura.html" class="page-nav-btn secondary">← Arquitectura</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

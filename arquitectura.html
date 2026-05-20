@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arquitectura del Sistema – AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+
+    /* ---- Sección ---- */
+    .arch-section {
+      margin-bottom: 52px;
+    }
+    .arch-section-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue-500);
+      margin-bottom: 16px;
+    }
+
+    /* ---- Capas del stack ---- */
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .stack-layer {
+      background: var(--bg-base);
+      border: 1px solid var(--border-soft);
+      border-left: 4px solid var(--blue-300);
+      border-radius: var(--r-sm);
+      padding: 22px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      box-shadow: var(--shadow-xs);
+      animation: fadeUp 0.4s ease both;
+      transition: border-left-color var(--t-sm), box-shadow var(--t-sm);
+    }
+    .stack-layer:hover { border-left-color: var(--blue-500); box-shadow: var(--shadow-md); }
+    .stack-layer.orange { border-left-color: var(--orange-300); }
+    .stack-layer.orange:hover { border-left-color: var(--orange-500); }
+    .stack-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: var(--r-xl);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stack-body { flex: 1; }
+    .stack-body h3 {
+      font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; color: var(--blue-900);
+    }
+    .stack-body p {
+      font-size: 0.875rem; color: var(--text-sec); line-height: 1.7; margin: 0;
+    }
+    .stack-body p + p { margin-top: 8px; }
+    .stack-arrow {
+      display: flex; align-items: center; justify-content: center;
+      padding: 5px 0; color: var(--grey-300); font-size: 1.1rem; user-select: none;
+    }
+
+    /* ---- Módulos grid ---- */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .module-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--r-sm);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-xs);
+      animation: fadeUp 0.35s ease both;
+      transition: box-shadow var(--t-sm), border-color var(--t-sm);
+    }
+    .module-card:hover { box-shadow: var(--shadow-md); border-color: var(--blue-200); }
+    .module-card-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .module-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--blue-300);
+    }
+    .module-dot.orange { background: var(--orange-500); }
+    .module-dot.red { background: #e05c5c; }
+    .module-card-name {
+      font-size: 0.88rem; font-weight: 700; color: var(--blue-900);
+    }
+    .module-card-sym {
+      font-size: 0.75rem; color: var(--text-sec); font-family: monospace;
+      background: var(--grey-100); border: 1px solid var(--border-soft);
+      border-radius: 4px; padding: 1px 6px; margin-bottom: 8px;
+    }
+    .module-card p {
+      font-size: 0.82rem; color: var(--text-sec); line-height: 1.6; margin: 0;
+    }
+
+    /* ---- Microservicios table ---- */
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .service-row {
+      display: grid;
+      grid-template-columns: 160px 180px 1fr;
+      gap: 12px;
+      align-items: center;
+      background: var(--bg-base);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--r-sm);
+      padding: 12px 16px;
+      font-size: 0.84rem;
+      animation: fadeUp 0.35s ease both;
+    }
+    .service-row:hover { border-color: var(--blue-200); }
+    .service-name { font-weight: 700; color: var(--blue-900); }
+    .service-url  { font-family: monospace; font-size: 0.78rem; color: var(--text-sec); }
+    .service-desc { color: var(--text-sec); }
+    @media (max-width: 680px) {
+      .service-row { grid-template-columns: 1fr; }
+    }
+
+    /* ---- HTTP methods ---- */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .method-card {
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      animation: fadeUp 0.35s ease both;
+    }
+    .method-badge {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em;
+      font-family: monospace;
+      padding: 2px 8px; border-radius: 4px; margin-bottom: 8px;
+    }
+    .method-card.get   { background: #e8f3e8; border: 1px solid #b8ddb8; }
+    .method-card.get   .method-badge { background: #2d8a2d; color: #fff; }
+    .method-card.post  { background: var(--blue-100); border: 1px solid var(--blue-200); }
+    .method-card.post  .method-badge { background: var(--blue-500); color: #fff; }
+    .method-card.patch { background: #fdf3e3; border: 1px solid #f5d99a; }
+    .method-card.patch .method-badge { background: #c47c00; color: #fff; }
+    .method-card.put   { background: #f0eafa; border: 1px solid #cdb8eb; }
+    .method-card.put   .method-badge { background: #7040b8; color: #fff; }
+    .method-card.delete{ background: #fdecea; border: 1px solid #f5b8b2; }
+    .method-card.delete .method-badge { background: #c0392b; color: #fff; }
+    .method-card p { font-size: 0.82rem; color: var(--text-sec); margin: 0; line-height: 1.5; }
+
+    /* ---- Roles ---- */
+    .roles-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .role-card {
+      background: var(--bg-base);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      animation: fadeUp 0.35s ease both;
+      transition: box-shadow var(--t-sm);
+    }
+    .role-card:hover { box-shadow: var(--shadow-md); }
+    .role-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+    .role-card-header.user  { background: var(--blue-100); border-bottom: 1px solid var(--blue-200); }
+    .role-card-header.admin { background: #fdecea; border-bottom: 1px solid #f5b8b2; }
+    .role-card-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .role-card-header.user  .role-card-avatar { background: var(--blue-200); }
+    .role-card-header.admin .role-card-avatar { background: #f5b8b2; }
+    .role-card-header-body {}
+    .role-card-header-body strong {
+      display: block; font-size: 0.95rem; font-weight: 800; color: var(--blue-900);
+    }
+    .role-card-header.user  .role-card-header-body strong { color: var(--blue-700); }
+    .role-card-header.admin .role-card-header-body strong { color: #a93226; }
+    .role-card-header-body span {
+      font-size: 0.78rem; color: var(--text-sec);
+    }
+    .role-card-body { padding: 16px 20px 20px; }
+    .role-perm-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .role-perm-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.84rem; color: var(--text-sec); line-height: 1.5;
+    }
+    .role-perm-list li .perm-icon {
+      flex-shrink: 0; margin-top: 1px;
+      width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .role-perm-list.user-perms  li .perm-icon { background: var(--blue-100); }
+    .role-perm-list.admin-perms li .perm-icon { background: #fdecea; }
+    .role-perm-list.admin-perms li.shared .perm-icon { background: var(--blue-100); }
+    .role-perm-list li .perm-icon svg { width: 9px; height: 9px; }
+
+    /* ---- Flow diagram ---- */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      align-items: center;
+    }
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 100px;
+    }
+    .flow-circle {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 800; flex-shrink: 0;
+    }
+    .flow-label { font-size: 0.78rem; color: var(--text-sec); line-height: 1.4; }
+    .flow-arrow {
+      color: var(--grey-300); font-size: 1.3rem; padding: 0 4px; flex-shrink: 0;
+      align-self: center;
+    }
+    @media (max-width: 600px) {
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+
+    /* ---- Info box ---- */
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--blue-100);
+      border: 1px solid var(--blue-200);
+      border-left: 4px solid var(--blue-500);
+      border-radius: var(--r-sm);
+      padding: 18px 22px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.4s ease 0.1s both;
+    }
+    .info-box-icon { flex-shrink: 0; margin-top: 1px; color: var(--blue-500); }
+    .info-box strong { display: block; font-size: 0.92rem; font-weight: 700; margin-bottom: 5px; color: var(--blue-900); }
+    .info-box p { font-size: 0.86rem; color: var(--text-sec); line-height: 1.65; margin: 0; }
+
+    /* ---- Page nav ---- */
+    .page-nav-footer {
+      display: flex; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .page-nav-btn {
+      display: inline-flex; align-items: center;
+      padding: 10px 22px; border-radius: var(--r-sm);
+      font-size: 0.88rem; font-weight: 700; font-family: var(--font);
+      transition: var(--t-sm);
+    }
+    .page-nav-btn.primary  { background: var(--blue-500); color: var(--white); }
+    .page-nav-btn.primary:hover  { background: var(--blue-700); transform: translateX(2px); }
+    .page-nav-btn.secondary { border: 1px solid var(--blue-400); color: var(--blue-500); background: var(--white); }
+    .page-nav-btn.secondary:hover { background: var(--blue-700); border-color: var(--blue-700); color: var(--white); }
+
+    /* ---- Divider ---- */
+    .section-divider {
+      border: none; border-top: 1px solid var(--border-soft); margin: 48px 0;
+    }
+    code {
+      font-family: monospace; font-size: 0.85em;
+      background: var(--grey-100); border: 1px solid var(--border-soft);
+      border-radius: 4px; padding: 1px 6px; color: var(--blue-700);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html"><img class="site-logo" src="img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="index.html" class="back-btn">← Volver al inicio</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container">
+
+      <div class="page-tag">Sección 01</div>
+      <h1 class="page-title">Arquitectura del sistema</h1>
+      <div class="page-divider"></div>
+
+      <p style="font-size:1rem;color:var(--text-sec);line-height:1.8;margin-bottom:8px;text-align:justify;padding:0 8px;">
+        El portal de boletines meteorológicos se construye sobre <strong style="color:var(--text-base)">Liferay 7 DXP</strong>,
+        una plataforma empresarial Java EE que gestiona la autenticación SSO, el control de acceso por roles y el
+        ensamblado de la interfaz mediante portlets.
+      </p>
+      <p style="font-size:1rem;color:var(--text-sec);line-height:1.8;margin-bottom:36px;text-align:justify;padding:0 8px;">
+        La lógica de negocio se distribuye en <strong style="color:var(--text-base)">13 módulos OSGi independientes</strong>
+        que se comunican con <strong style="color:var(--text-base)">6 microservicios backend</strong> a través del módulo
+        transversal <code>aemet-api-client</code>, único punto de entrada a todos los servicios externos.
+      </p>
+
+
+      <!-- ═══════════════════════════════════════════
+           1. STACK DE CAPAS
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">01 — Stack técnico</div>
+
+        <div class="stack">
+
+          <div class="stack-layer" style="animation-delay:0s">
+            <div class="stack-icon" style="background:var(--blue-100);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="stack-body">
+              <h3>Capa de presentación — Tema + JSP</h3>
+              <p>El tema <code>boletines-theme</code> define la estructura HTML global mediante plantillas <strong>Freemarker</strong>
+                (<code>portal_normal.ftl</code>, <code>navigation.ftl</code>). Cada portlet renderiza sus propias vistas
+                <strong>JSP</strong> con Liferay MVC. Los estilos siguen el sistema de diseño propio de AEMET: Nunito Sans,
+                azul <code>#1950a0</code> y naranja <code>#faaf00</code>, con arquitectura SCSS modular.</p>
+              <p>Las peticiones AJAX (filtros, paginación, carga de datos) se resuelven mediante
+                <strong>MVCResourceCommand</strong> desde el mismo portlet, devolviendo JSON al frontend.</p>
+            </div>
+          </div>
+
+          <div class="stack-arrow">↓</div>
+
+          <div class="stack-layer" style="animation-delay:0.07s">
+            <div class="stack-icon" style="background:var(--blue-100);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="stack-body">
+              <h3>Capa de negocio — Portlets OSGi (Liferay MVC)</h3>
+              <p>Cada módulo es un <strong>bundle OSGi</strong> desplegado de forma independiente en el contenedor Felix de
+                Liferay. Siguen el patrón <strong>Liferay MVC</strong>: un <code>*Portlet.java</code> como controlador
+                principal, <code>*MVCRenderCommand</code> para las vistas, <code>*MVCActionCommand</code> para los
+                formularios y <code>*MVCResourceCommand</code> para las llamadas AJAX/JSON.</p>
+              <p>El módulo <code>boletines</code> incluye además la librería <strong>iTextPDF</strong> como recurso
+                embebido (<code>@itextpdf-*.jar</code>) para la generación de documentos PDF.</p>
+            </div>
+          </div>
+
+          <div class="stack-arrow">↓</div>
+
+          <div class="stack-layer orange" style="animation-delay:0.14s">
+            <div class="stack-icon" style="background:var(--orange-200);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#966900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            </div>
+            <div class="stack-body">
+              <h3>Capa de integración — aemet-api-client</h3>
+              <p>Bundle OSGi registrado como <strong>servicio</strong> (<code>@Component … service = ApiGateway.class</code>).
+                Cualquier módulo que necesite datos externos lo inyecta mediante <code>@Reference ApiGateway</code>.
+                Encapsula la configuración de los 6 endpoints (URLs, timeouts) a través de <strong>OSGi ConfigAdmin</strong>
+                (<code>AemetApiConfiguration</code>), modificable en caliente desde el panel de control de Liferay sin
+                reiniciar el servidor.</p>
+              <p>Soporta GET, POST JSON, PUT JSON, PATCH JSON y DELETE. Las respuestas se leen con soporte
+                <strong>gzip</strong> y se devuelven como <code>String</code> JSON para que cada módulo
+                deserialice según su modelo de dominio.</p>
+            </div>
+          </div>
+
+          <div class="stack-arrow">↓</div>
+
+          <div class="stack-layer orange" style="animation-delay:0.21s">
+            <div class="stack-icon" style="background:var(--orange-200);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#966900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+            </div>
+            <div class="stack-body">
+              <h3>Capa de datos — Microservicios backend</h3>
+              <p>Seis microservicios REST independientes, cada uno con su propio puerto, exponen los datos al portal.
+                El módulo <code>aemet-api-client</code> resuelve la URL correcta según el enum <code>ApiBase</code>
+                (<code>BULLETINS</code>, <code>CERTIFICATES</code>, <code>REPORTS</code>, <code>REPORTS_PDF</code>,
+                <code>ADMINISTRACION</code>, <code>NOTIFICACIONES</code>, <code>ZONIFICACION</code>).</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+
+      <!-- ═══════════════════════════════════════════
+           2. MICROSERVICIOS
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">02 — Microservicios backend</div>
+
+        <div class="services-list">
+          <div class="service-row" style="animation-delay:0s">
+            <span class="service-name">Bulletins</span>
+            <span class="service-url">:5003 — BULLETINS</span>
+            <span class="service-desc">Boletines meteorológicos provinciales y marítimos (incluido NAVTEX). Fuente principal del módulo <strong>boletines</strong>.</span>
+          </div>
+          <div class="service-row" style="animation-delay:0.05s">
+            <span class="service-name">Certificates</span>
+            <span class="service-url">:5001 — CERTIFICATES</span>
+            <span class="service-desc">Gestión de certificados meteorológicos oficiales: solicitud, consulta, edición y borrado.</span>
+          </div>
+          <div class="service-row" style="animation-delay:0.10s">
+            <span class="service-name">Reports</span>
+            <span class="service-url">:5002 — REPORTS</span>
+            <span class="service-desc">Datos meteorológicos para informes personalizados: series temporales, parámetros y zonas.</span>
+          </div>
+          <div class="service-row" style="animation-delay:0.15s">
+            <span class="service-name">Reports PDF</span>
+            <span class="service-url">:5004 — REPORTS_PDF / ZONIFICACION</span>
+            <span class="service-desc">Generación de documentos PDF de informes y servicio de zonificación geográfica.</span>
+          </div>
+          <div class="service-row" style="animation-delay:0.20s">
+            <span class="service-name">Administración</span>
+            <span class="service-url">:5005 — ADMINISTRACION</span>
+            <span class="service-desc">Gestión de usuarios, reglas de negocio, logs de actividad e indicadores de uso.</span>
+          </div>
+          <div class="service-row" style="animation-delay:0.25s">
+            <span class="service-name">Notificaciones</span>
+            <span class="service-url">:8002/v1 — NOTIFICACIONES</span>
+            <span class="service-desc">Envío y consulta de notificaciones al usuario. Único servicio con prefijo de versión <code>/v1</code> en la URL base.</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+
+      <!-- ═══════════════════════════════════════════
+           3. MÉTODOS HTTP — ApiGateway
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">03 — Contrato del ApiGateway</div>
+
+        <p style="font-size:0.875rem;color:var(--text-sec);line-height:1.7;margin-bottom:18px;max-width:720px;">
+          La interfaz <code>ApiGateway</code> expone un método por verbo HTTP. Cada uno tiene
+          una variante que recibe el enum <code>ApiBase</code> (resuelve la URL base) y otra que acepta
+          una URL absoluta para casos especiales.
+        </p>
+
+        <div class="methods-grid">
+          <div class="method-card get" style="animation-delay:0s">
+            <div class="method-badge">GET</div>
+            <p>Consulta de recursos. Acepta ruta relativa, <code>ApiBase + ruta</code> o URL absoluta. Soporta respuesta gzip.</p>
+          </div>
+          <div class="method-card post" style="animation-delay:0.05s">
+            <div class="method-badge">POST</div>
+            <p>Creación de recursos. Envía un cuerpo <code>application/json</code>. Acepta ruta relativa, <code>ApiBase + ruta</code> o URL absoluta.</p>
+          </div>
+          <div class="method-card put" style="animation-delay:0.10s">
+            <div class="method-badge">PUT</div>
+            <p>Reemplazo completo de un recurso. Acepta <code>ApiBase + ruta</code> o URL absoluta.</p>
+          </div>
+          <div class="method-card patch" style="animation-delay:0.15s">
+            <div class="method-badge">PATCH</div>
+            <p>Actualización parcial. Usa <code>java.net.http.HttpClient</code> (Java 11) porque <code>HttpURLConnection</code> no soporta PATCH de forma nativa.</p>
+          </div>
+          <div class="method-card delete" style="animation-delay:0.20s">
+            <div class="method-badge">DELETE</div>
+            <p>Eliminación de un recurso. Acepta <code>ApiBase + ruta</code> o URL absoluta.</p>
+          </div>
+        </div>
+
+        <div class="info-box" style="margin-top:20px;margin-bottom:0;">
+          <div class="info-box-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>
+            <strong>Configuración en caliente</strong>
+            <p>Las URLs base y los timeouts (<code>connectTimeoutMs</code>, <code>readTimeoutMs</code>) se configuran desde
+              <em>Panel de control → Configuración del sistema → aemet-boletines</em> sin necesidad de reiniciar.
+              El método <code>@Activate / @Modified activate()</code> del impl recarga los valores en tiempo de ejecución.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+
+      <!-- ═══════════════════════════════════════════
+           4. MÓDULOS OSGi
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">04 — Módulos OSGi del portal</div>
+
+        <p style="font-size:0.875rem;color:var(--text-sec);line-height:1.7;margin-bottom:18px;max-width:720px;">
+          Cada módulo es un bundle OSGi con su propio ciclo de vida. Se despliegan, actualizan y detienen
+          de forma independiente. Los módulos del panel de administración son portlets separados que
+          Liferay ensambla en la misma página.
+        </p>
+
+        <div class="modules-grid">
+
+          <div class="module-card" style="animation-delay:0s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">boletines</span>
+            </div>
+            <div class="module-card-sym">BoletinesPortlet</div>
+            <p>Dos portlets: <strong>BoletinesProvincialesPortlet</strong> y <strong>BoletinesMaritimosPortlet</strong>.
+              Gestiona el listado, filtrado, detalle y CRUD de boletines. Incluye iTextPDF como recurso embebido.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.04s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">certificados</span>
+            </div>
+            <div class="module-card-sym">CertificadosPortlet</div>
+            <p>Listado, detalle, solicitud, edición y borrado de certificados meteorológicos oficiales.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.08s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">informes</span>
+            </div>
+            <div class="module-card-sym">InformesPortlet</div>
+            <p>Creación de informes personalizados con selección de parámetros meteorológicos, descarga PDF y gestión completa del ciclo de vida.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.12s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">area-personal</span>
+            </div>
+            <div class="module-card-sym">AreaPersonalPortlet</div>
+            <p>Perfil del usuario autenticado: nombre, correo, rol y opciones de configuración de cuenta.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.16s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">gestion-usuarios</span>
+            </div>
+            <div class="module-card-sym">GestionUsuariosPortlet</div>
+            <p>Alta, edición, activación/desactivación y borrado de usuarios del portal. Solo rol Administrador.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.20s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">logs</span>
+            </div>
+            <div class="module-card-sym">LogsPortlet · ConfigChangesLogsPortlet</div>
+            <p>Dos portlets: registro cronológico de actividad del portal y listado de cambios de configuración.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.24s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">indicadores-uso</span>
+            </div>
+            <div class="module-card-sym">IndicadoresUsoPortlet</div>
+            <p>Estadísticas de acceso y uso: sesiones, módulos más consultados y métricas de actividad.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.28s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">reglas</span>
+            </div>
+            <div class="module-card-sym">ReglasPortlet · ReglasMaritimasPortlet</div>
+            <p>Gestión de reglas que condicionan el comportamiento del portal. Dos portlets: reglas generales y reglas marítimas.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.32s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">notificaciones</span>
+            </div>
+            <div class="module-card-sym">NotificacionesPortlet</div>
+            <p>Centro de notificaciones: listado, detalle y gestión de avisos enviados a los usuarios.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.36s">
+            <div class="module-card-head">
+              <div class="module-dot orange"></div>
+              <span class="module-card-name">administracion</span>
+            </div>
+            <div class="module-card-sym">ZonificacionPortlet</div>
+            <p>Portlet de zonificación geográfica dentro del panel de administración. Gestiona las zonas de predicción.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.40s">
+            <div class="module-card-head">
+              <div class="module-dot red"></div>
+              <span class="module-card-name">aemet-api-client</span>
+            </div>
+            <div class="module-card-sym">Export-Package: aemet.api.client</div>
+            <p>Bundle transversal. Exporta el paquete <code>aemet.api.client</code> para que todos los módulos
+              puedan inyectar el servicio <code>ApiGateway</code> vía OSGi.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.44s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">header</span>
+            </div>
+            <div class="module-card-sym">HeaderPortlet</div>
+            <p>Cabecera global del portal: menú de usuario, acceso al área personal y notificaciones activas.</p>
+          </div>
+
+          <div class="module-card" style="animation-delay:0.48s">
+            <div class="module-card-head">
+              <div class="module-dot"></div>
+              <span class="module-card-name">boletines-login-redirect</span>
+            </div>
+            <div class="module-card-sym">login-redirect</div>
+            <p>Redirige al usuario tras el login a la página correcta según su rol, evitando la página de inicio por defecto de Liferay.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+
+      <!-- ═══════════════════════════════════════════
+           5. FLUJO DE UNA PETICIÓN
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">05 — Flujo de una petición</div>
+
+        <p style="font-size:0.875rem;color:var(--text-sec);line-height:1.7;margin-bottom:20px;max-width:720px;">
+          Ejemplo: el usuario pulsa "Ver boletín" en el listado de boletines provinciales.
+        </p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--blue-100);color:var(--blue-500);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div class="flow-label">JSP<br/>enlace al detalle</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--blue-100);color:var(--blue-500);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            </div>
+            <div class="flow-label">MVCRenderCommand<br/>(<code>view-boletin</code>)</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--orange-200);color:var(--orange-700);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            </div>
+            <div class="flow-label">ApiGateway<br/><code>get(BULLETINS, …)</code></div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--orange-200);color:var(--orange-700);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+            </div>
+            <div class="flow-label">Bulletins API<br/><code>:5003</code></div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--blue-100);color:var(--blue-500);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="flow-label">JSON → model<br/>→ <code>view-boletin.jsp</code></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+
+      <!-- ═══════════════════════════════════════════
+           6. ROLES DE USUARIO
+      ════════════════════════════════════════════ -->
+      <div class="arch-section">
+        <div class="arch-section-title">06 — Usuarios y roles</div>
+
+        <p style="font-size:0.875rem;color:var(--text-sec);line-height:1.7;margin-bottom:20px;max-width:720px;">
+          Los usuarios no se crean manualmente en el portal: se <strong style="color:var(--text-base)">importan desde el LDAP corporativo</strong>.
+          Una vez importados, un administrador los da de alta en el sistema asignándoles uno de los dos roles disponibles.
+        </p>
+
+        <!-- Flujo de alta -->
+        <div class="flow" style="margin-bottom:32px;">
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--grey-100);color:var(--grey-500);border:1px solid var(--border-soft);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div class="flow-label">LDAP corporativo<br/>fuente de usuarios</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--blue-100);color:var(--blue-500);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="flow-label">Usuario importado<br/>pendiente de activación</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:var(--orange-200);color:var(--orange-700);">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="flow-label">Administrador<br/>da de alta y asigna rol</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-circle" style="background:#e8f3e8;color:#2d8a2d;border:1px solid #b8ddb8;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="flow-label">Usuario activo<br/>con acceso al portal</div>
+          </div>
+        </div>
+
+        <!-- Los dos roles -->
+        <div class="roles-grid">
+
+          <!-- Usuario normal -->
+          <div class="role-card" style="animation-delay:0s">
+            <div class="role-card-header user">
+              <div class="role-card-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="role-card-header-body">
+                <strong>Usuario normal</strong>
+                <span>Acceso a las secciones operativas</span>
+              </div>
+            </div>
+            <div class="role-card-body">
+              <ul class="role-perm-list user-perms">
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Panel de control — boletines, certificados e informes
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Área personal
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Administrador -->
+          <div class="role-card" style="animation-delay:0.1s">
+            <div class="role-card-header admin">
+              <div class="role-card-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="role-card-header-body">
+                <strong>Administrador</strong>
+                <span>Acceso completo a todo el sistema</span>
+              </div>
+            </div>
+            <div class="role-card-body">
+              <ul class="role-perm-list admin-perms">
+                <li class="shared">
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Panel de control — boletines, certificados e informes
+                </li>
+                <li class="shared">
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1950a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Área personal
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Gestión de usuarios — alta, edición y borrado
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Logs de actividad y cambios de configuración
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Indicadores de uso
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Reglas generales y marítimas
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Centro de notificaciones
+                </li>
+                <li>
+                  <span class="perm-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#a93226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                  Zonificación
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="page-nav-footer">
+        <a href="index.html" class="page-nav-btn secondary">← Inicio</a>
+        <a href="modulos.html" class="page-nav-btn primary">Siguiente: Módulos →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

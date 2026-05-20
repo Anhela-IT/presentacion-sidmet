@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boletines – Paso a Paso | AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/gallery.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html"><img class="site-logo" src="../img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="../modulos.html" class="back-btn">← Volver a módulos</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container" style="max-width:900px;">
+      <div class="gallery-header">
+        <div class="gallery-breadcrumb">
+          <a href="../index.html">Inicio</a>
+          <span>›</span>
+          <a href="../modulos.html">Módulos</a>
+          <span>›</span>
+          <span class="current">Boletines</span>
+        </div>
+        <div class="gallery-title-row">
+          <div>
+            <div class="page-tag">Módulo 01</div>
+            <h1 class="page-title" style="margin-bottom:0;">Boletines meteorológicos</h1>
+          </div>
+
+        </div>
+        <div class="page-divider"></div>
+        <p class="gallery-intro">
+          El módulo de boletines permite <strong>consultar y editar</strong> boletines meteorológicos
+          oficiales de AEMET, tanto <strong>Provinciales</strong> como <strong>Marítimos</strong>
+          (alta mar y NAVTEX). El flujo completo cubre: listado con filtros, detalle, edición y validación/envío.
+        </p>
+      </div>
+
+      <div class="gallery-grid" id="gallery-container"></div>
+
+      <div class="gallery-page-nav">
+        <a href="../modulos.html" class="page-nav-btn secondary">← Volver a módulos</a>
+        <a href="certificados.html" class="page-nav-btn primary">Siguiente: Certificados →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/gallery.js"></script>
+  <script>
+    initGallery({
+      prefix: 'Boletines',
+      folder: '../imagenes/Boletines/',
+      maxImages: 9,
+      container: '#gallery-container'
+    });
+  </script>
+</body>
+</html>

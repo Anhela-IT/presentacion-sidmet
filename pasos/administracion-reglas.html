@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de reglas – Administración | AEMET Boletines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/gallery.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html"><img class="site-logo" src="../img/logo.svg" alt="AEMET" /></a>
+      <span class="header-subtitle">Portal de Boletines Meteorológicos</span>
+    </div>
+    <a href="administracion.html" class="back-btn">← Volver a Administración</a>
+  </header>
+
+  <main class="page-wrapper">
+    <div class="page-container" style="max-width:900px;">
+      <div class="gallery-header">
+        <div class="gallery-breadcrumb">
+          <a href="../index.html">Inicio</a>
+          <span>›</span>
+          <a href="../modulos.html">Módulos</a>
+          <span>›</span>
+          <a href="administracion.html">Administración</a>
+          <span>›</span>
+          <span class="current">Gestión de reglas</span>
+        </div>
+        <div class="gallery-title-row">
+          <div>
+            <div class="page-tag" style="background:var(--orange-200);border-color:var(--orange-300);color:var(--orange-700);">Solo Administrador</div>
+            <h1 class="page-title" style="margin-bottom:0;">Gestión de reglas</h1>
+          </div>
+        </div>
+        <div class="page-divider" style="background:var(--orange-500);"></div>
+        <p class="gallery-intro">
+          Sub-módulo para definir las <strong>reglas de comportamiento</strong> del portal. Cada regla
+          establece condiciones y las acciones que el sistema ejecuta automáticamente cuando se cumplen.
+          Permite crear, editar y activar/desactivar reglas desde un listado centralizado.
+        </p>
+      </div>
+
+      <div class="gallery-grid" id="gallery-container"></div>
+
+      <div class="gallery-page-nav">
+        <a href="administracion-logs.html" class="page-nav-btn secondary">← Logs y estadísticas</a>
+        <a href="administracion-notificaciones.html" class="page-nav-btn primary">Siguiente: Notificaciones →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 AEMET · Portal de Boletines Meteorológicos</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/gallery.js"></script>
+  <script>
+    initGallery({
+      prefix: 'AdminReglas',
+      folder: '../imagenes/AdminReglas/',
+      maxImages: 2,
+      container: '#gallery-container'
+    });
+  </script>
+</body>
+</html>
